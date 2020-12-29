@@ -39,6 +39,9 @@ func TestAccProjectCreate_basic(t *testing.T) {
 						"commercetools_project_settings.acctest_project_settings", "external_oauth.authorization_header", "Bearer secret",
 					),
 					resource.TestCheckResourceAttr(
+						"commercetools_project_settings.acctest_project_settings", "shipping_rate_input_type.type", "CartValue",
+					),
+					resource.TestCheckResourceAttr(
 						"commercetools_project_settings.acctest_project_settings", "carts.country_tax_rate_fallback_enabled", "true",
 					),
 				),
@@ -66,6 +69,12 @@ func TestAccProjectCreate_basic(t *testing.T) {
 					),
 					resource.TestCheckResourceAttr(
 						"commercetools_project_settings.acctest_project_settings", "external_oauth.authorization_header", "Bearer new-secret",
+					),
+					resource.TestCheckResourceAttr(
+						"commercetools_project_settings.acctest_project_settings", "shipping_rate_input_type.type", "CartClassification",
+					),
+					resource.TestCheckResourceAttr(
+						"commercetools_project_settings.acctest_project_settings", "shipping_rate_input_type.values.#", "3",
 					),
 					resource.TestCheckResourceAttr(
 						"commercetools_project_settings.acctest_project_settings", "carts.country_tax_rate_fallback_enabled", "false",
@@ -96,6 +105,12 @@ func TestAccProjectCreate_basic(t *testing.T) {
 					resource.TestCheckNoResourceAttr(
 						"commercetools_project_settings.acctest_project_settings", "external_oauth.authorization_header",
 					),
+					resource.TestCheckResourceAttr(
+						"commercetools_project_settings.acctest_project_settings", "shipping_rate_input_type.type", "CartClassification",
+					),
+					resource.TestCheckResourceAttr(
+						"commercetools_project_settings.acctest_project_settings", "shipping_rate_input_type.values.#", "3",
+					),
 					resource.TestCheckNoResourceAttr(
 						"commercetools_project_settings.acctest_project_settings", "carts.country_tax_rate_fallback_enabled",
 					),
@@ -123,6 +138,9 @@ func testAccProjectConfig() string {
 			messages = {
 			  enabled = true
 			}
+			shipping_rate_input_type = { 
+				type = "CartValue" 
+            }
 			carts = {
               country_tax_rate_fallback_enabled = true
             }
@@ -143,6 +161,14 @@ func testAccProjectConfigUpdate() string {
 			messages = {
 			  enabled = false
 			}
+            shipping_rate_input_type = { 
+				type = "CartClassification"
+				values = [ 
+					{ key = "Small", label = { "en" = "Small", "de" = "Klein" } },
+					{ key = "Medium", label = { "en" = "Medium", "de" = "Mittel" } },
+					{ key = "Heavy", label = { "en" = "Heavy", "de" = "Schwergut" } },
+				]
+            }
 			carts = {
               country_tax_rate_fallback_enabled = false
             }
@@ -159,5 +185,13 @@ func testAccProjectConfigDeleteOAuthAndCarts() string {
 			messages = {
 			  enabled = false
 			}
+            shipping_rate_input_type = { 
+				type = "CartClassification"
+				values = [ 
+					{ key = "Small", label = { "en" = "Small", "de" = "Klein" } },
+					{ key = "Medium", label = { "en" = "Medium", "de" = "Mittel" } },
+					{ key = "Heavy", label = { "en" = "Heavy", "de" = "Schwergut" } },
+				]
+            }
 		}`
 }
