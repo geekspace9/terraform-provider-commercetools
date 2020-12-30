@@ -88,7 +88,6 @@ func resourceShippingZoneRate() *schema.Resource {
 								string(commercetools.ShippingRateTierTypeCartClassification),
 							}, false),
 						},
-						// TODO: Do we want to validate below based on value in "type"?
 						"minimum_cent_amount": {
 							Type:     schema.TypeInt,
 							Optional: true,
