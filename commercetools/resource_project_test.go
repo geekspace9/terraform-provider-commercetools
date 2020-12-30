@@ -164,9 +164,27 @@ func testAccProjectConfigUpdate() string {
             shipping_rate_input_type = { 
 				type = "CartClassification"
 				values = [ 
-					{ key = "Small", label = { "en" = "Small", "de" = "Klein" } },
-					{ key = "Medium", label = { "en" = "Medium", "de" = "Mittel" } },
-					{ key = "Heavy", label = { "en" = "Heavy", "de" = "Schwergut" } },
+					{ 
+						key = "Small"
+						label = { 
+							"en" = "Small",
+							"de" = "Klein"
+						}
+					},
+					{ 
+						key = "Medium",
+						label = { 
+							"en" = "Medium",
+							"de" = "Mittel" 
+						} 	
+					},
+					{ 
+						key = "Heavy",
+						label = { 
+							"en" = "Heavy",
+							"de" = "Schwergut"
+						} 
+					},
 				]
             }
 			carts = {
@@ -188,9 +206,27 @@ func testAccProjectConfigDeleteOAuthAndCarts() string {
             shipping_rate_input_type = { 
 				type = "CartClassification"
 				values = [ 
-					{ key = "Small", label = { "en" = "Small", "de" = "Klein" } },
-					{ key = "Medium", label = { "en" = "Medium", "de" = "Mittel" } },
-					{ key = "Heavy", label = { "en" = "Heavy", "de" = "Schwergut" } },
+					{ 
+						key = "Small"
+						label = { 
+							"en" = "Small",
+							"de" = "Klein"
+						}
+					},
+					{ 
+						key = "Medium",
+						label = { 
+							"en" = "Medium",
+							"de" = "Mittel" 
+						} 
+					},
+					{ 
+						key = "Heavy",
+						label = { 
+							"en" = "Heavy",
+							"de" = "Schwergut"
+						} 
+					},
 				]
             }
 		}`
