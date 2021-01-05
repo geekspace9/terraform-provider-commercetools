@@ -85,29 +85,21 @@ func resourceProjectSettings() *schema.Resource {
 					}},
 			},
 			"shipping_rate_input_type": {
-				Type:     schema.TypeMap,
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"shipping_rate_cart_classification_values": {
+				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"type": {
+						"key": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"values": {
-							Type:     schema.TypeList,
+						"label": {
+							Type:     TypeLocalizedString,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"key": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-									"label": {
-										Type:     TypeLocalizedString,
-										Required: true,
-									},
-								},
-							},
 						},
 					},
 				},
@@ -275,8 +267,11 @@ func projectUpdate(d *schema.ResourceData, client *commercetools.Client, version
 
 	}
 
-	if d.HasChange("shipping_rate_input_type") {
-		newShippingRateInputType := d.Get("shipping_rate_input_type").(commercetools.ShippingRateInputType)
+	if d.HasChange("shipping_rate_input_type") || d.HasChange("shipping_rate_cart_classification_values") {
+		newShippingRateInputType, err := getShippingRateInputType(d)
+		if err != nil {
+			return err
+		}
 		input.Actions = append(
 			input.Actions,
 			&commercetools.ProjectSetShippingRateInputTypeAction{ShippingRateInputType: newShippingRateInputType})
@@ -338,4 +333,35 @@ func getStringSlice(d *schema.ResourceData, field string) []string {
 	}
 
 	return currencyObjects
+}
+
+func getShippingRateInputType(d *schema.ResourceData) (commercetools.ShippingRateInputType, error) {
+	switch d.Get("shipping_rate_input_type").(string) {
+	case "CartValue":
+		return commercetools.CartValueType{}, nil
+	case "CartScore":
+		return commercetools.CartScoreType{}, nil
+	case "CartClassification":
+		values, err := getCartClassificationValues(d)
+		if err != nil {
+			return "", fmt.Errorf("invalid cart classification value: %v, %w", values, err)
+		}
+		return commercetools.CartClassificationType{Values: values}, nil
+	default:
+		return "", fmt.Errorf("shipping rate input type %s not implemented", d.Get("shipping_rate_input_type").(string))
+	}
+}
+
+func getCartClassificationValues(d *schema.ResourceData) ([]commercetools.CustomFieldLocalizedEnumValue, error) {
+	var values []commercetools.CustomFieldLocalizedEnumValue
+	data := d.Get("shipping_rate_cart_classification_values").([]interface{})
+	for _, item := range data {
+		itemMap := item.(map[string]interface{})
+		label := commercetools.LocalizedString(expandStringMap(itemMap["label"].(map[string]interface{})))
+		values = append(values, commercetools.CustomFieldLocalizedEnumValue{
+			Label: &label,
+			Key:   itemMap["key"].(string),
+		})
+	}
+	return values, nil
 }

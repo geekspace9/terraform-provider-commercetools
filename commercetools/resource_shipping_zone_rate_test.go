@@ -200,21 +200,21 @@ func testAccShippingZoneRateUpdate(taxCategoryName string, shippingMethodName st
 		}
 		
 		shipping_rate_price_tiers {
-            type  = "CartScore"
-            score = 10
+            type                = "CartValue"
+            minimum_cent_amount = 5000
 
             price {
-              cent_amount      = 5000
+              cent_amount      = 4321
               currency_code    = "%[3]s"
             }
 		}
 
 		shipping_rate_price_tiers {
-			type  = "CartScore"
-            score = 20
+			type                = "CartValue"
+            minimum_cent_amount = 20000
 
             price {
-              cent_amount      = 2000
+              cent_amount      = 1234
               currency_code    = "%[3]s"
             }
 		}
