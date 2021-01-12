@@ -1,3 +1,7 @@
+Unreleased
+====================
+ - Type Resource: Remove invalid type["name"] condition
+
 v0.26.1 (2021-01-21)
 ====================
  - Api Extension Resource: Fixed typo in `trigger` field name that caused updates to actions in triggers to fail
