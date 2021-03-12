@@ -138,7 +138,14 @@ func testAccProjectConfig() string {
 			messages = {
 			  enabled = true
 			}
+
+			carts = {
+              country_tax_rate_fallback_enabled = true
+            }
+
 			shipping_rate_input_type = "CartValue"
+                        
+
 		}`
 }
 
@@ -156,6 +163,11 @@ func testAccProjectConfigUpdate() string {
 			messages = {
 			  enabled = false
 			}
+
+			carts = {
+              country_tax_rate_fallback_enabled = false
+            }
+
             shipping_rate_input_type = "CartClassification"
 			shipping_rate_cart_classification_values {
 				key = "Small"
@@ -177,6 +189,7 @@ func testAccProjectConfigDeleteOAuthAndCarts() string {
 			messages = {
 			  enabled = false
 			}
+
 			shipping_rate_input_type = "CartClassification"
 			shipping_rate_cart_classification_values {
 				key = "Small"
